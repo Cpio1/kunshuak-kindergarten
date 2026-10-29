@@ -49,9 +49,9 @@ export function MobileHero({ photo }: { photo: ImageFile | null }) {
         <div className="mt-5 flex justify-center md:mt-0">
           <HeroVisual
             photo={photo}
-            sizes="(min-width: 768px) 340px, 92vw"
+            sizes="190px"
+            sceneSize={275}
             logoSize={160}
-            imageClassName="max-h-[300px]"
           />
         </div>
 

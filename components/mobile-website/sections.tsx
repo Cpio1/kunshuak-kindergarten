@@ -22,6 +22,7 @@ import { MealsPlate } from "@/components/shared/meals-plate";
 import { PebblePhoto } from "@/components/shared/section-photo";
 import { cardShape, iconShape } from "@/components/shared/shapes";
 import { TwoGisMap } from "@/components/shared/two-gis-map";
+import { WhatsAppAction } from "@/components/shared/whatsapp-action";
 import { useReveal } from "@/components/shared/use-reveal";
 import { mobileId } from "./header";
 
@@ -307,6 +308,7 @@ export function MobileContacts() {
             <PhoneIcon className="size-5" />
             {t.header.call}
           </a>
+          <WhatsAppAction className="col-span-2 min-h-12 px-4 py-2 text-center text-[15px] leading-tight" />
           <TwoGisMap className="col-span-2 mt-1 h-[260px] md:h-[300px]" />
           {[
             { href: mapLinks.twoGis, label: t.contacts.open2gis },

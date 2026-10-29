@@ -62,9 +62,9 @@ export function Hero({ photo }: { photo: ImageFile | null }) {
         <div className="relative flex items-center justify-center">
           <HeroVisual
             photo={photo}
-            sizes="(min-width: 1200px) 520px, 45vw"
+            sizes="300px"
+            sceneSize={430}
             logoSize={250}
-            imageClassName="max-h-[min(540px,calc(100svh-9rem))]"
           />
         </div>
       </div>

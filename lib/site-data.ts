@@ -62,6 +62,11 @@ export const site = {
     display: "+7 (771) 456-00-59",
     href: "tel:+77714560059",
   },
+  /** WhatsApp на тот же номер, что и телефон. */
+  whatsapp: {
+    display: "+7 (771) 456-00-59",
+    url: "https://wa.me/77714560059",
+  },
   instagram: {
     handle: "@kunshuak_erkin",
     url: "https://www.instagram.com/kunshuak_erkin/",

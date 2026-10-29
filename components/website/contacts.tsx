@@ -6,6 +6,7 @@ import { DocumentsAction, useDocumentsText } from "@/components/shared/documents
 import { ClockIcon, ExternalIcon, FolderIcon, InstagramIcon, PhoneIcon, PinIcon } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
 import { iconShape } from "@/components/shared/shapes";
+import { WhatsAppAction } from "@/components/shared/whatsapp-action";
 import { TwoGisMap } from "@/components/shared/two-gis-map";
 
 export function Documents() {
@@ -91,13 +92,16 @@ export function Contacts() {
                 </li>
               ))}
             </ul>
-            <a
-              href={site.phone.href}
-              className="btn-primary mt-auto inline-flex h-12 items-center justify-center gap-2 rounded-full px-5 text-[15px] font-bold"
-            >
-              <PhoneIcon className="size-5" />
-              {t.header.call}
-            </a>
+            <div className="mt-auto flex flex-wrap gap-2.5 pt-5">
+              <a
+                href={site.phone.href}
+                className="btn-primary inline-flex h-12 min-w-[150px] flex-1 items-center whitespace-nowrap justify-center gap-2 rounded-full px-5 text-[15px] font-bold"
+              >
+                <PhoneIcon className="size-5" />
+                {t.header.call}
+              </a>
+              <WhatsAppAction className="h-12 flex-[1.15] whitespace-nowrap px-5 text-[15px]" />
+            </div>
           </div>
           </div>
 
