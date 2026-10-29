@@ -1,4 +1,8 @@
 {
   "main": null,
-  "about": null
+  "about": {
+    "src": "/images/main-page2.jpeg",
+    "width": 1254,
+    "height": 1254
+  }
 }
