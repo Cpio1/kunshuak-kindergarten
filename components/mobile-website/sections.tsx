@@ -1,7 +1,8 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { mapLinks, site, type ImageFile } from "@/lib/site-data";
-import { Cloud, SunMark } from "@/components/shared/decor";
+import { Cloud } from "@/components/shared/decor";
 import { DocumentsAction, useDocumentsText } from "@/components/shared/documents-action";
 import { GalleryEmpty, GalleryRowFiller, GalleryThumb, Lightbox, justifiedItemStyle, useGallery } from "@/components/shared/gallery";
 import {
@@ -20,6 +21,7 @@ import {
 import { useLanguage } from "@/components/shared/language-provider";
 import { SectionPhoto } from "@/components/shared/section-photo";
 import { TwoGisMap } from "@/components/shared/two-gis-map";
+import { useReveal } from "@/components/shared/use-reveal";
 import { mobileId } from "./header";
 
 const container = "mx-auto max-w-3xl px-4";
@@ -73,83 +75,69 @@ export function MobileAbout({ photo }: { photo: ImageFile | null }) {
   );
 }
 
-const groupIcons = { count: UsersIcon, ages: BalloonIcon, language: ChatIcon } as const;
+const lifeIcons = { groups: UsersIcon, ages: BalloonIcon, language: ChatIcon, food: BowlIcon } as const;
 
-export function MobileGroupsFood() {
+/** «Топтар және тамақтану / Группы и питание»: группы, возраст, язык и питание — одним разделом. */
+export function MobileLife() {
   const { locale, t } = useLanguage();
-  const groupCards = Object.entries(t.groups.cards) as [keyof typeof groupIcons, { value: string; text: string }][];
+  const { ref, revealProps } = useReveal<HTMLUListElement>();
+  const cards = Object.entries(t.life.cards) as [keyof typeof lifeIcons, { value: string; text: string }][];
 
   return (
-    <div className={`${container} grid gap-3 py-2`}>
-      <section
-        id={mobileId("groups")}
-        aria-labelledby="m-groups-title"
-        className="relative scroll-mt-20 overflow-hidden rounded-[22px] bg-sun-soft/70 p-5"
-      >
-        <Cloud className="absolute -right-3 top-3 w-16 opacity-80" />
-        <p className="kicker">{t.groups.kicker}</p>
-        <h2 id="m-groups-title" className="relative mt-2 text-[22px] font-extrabold leading-tight text-ink md:text-2xl">
-          {t.groups.title}
-        </h2>
-        <p className="relative mt-2 text-sm leading-relaxed text-ink-soft md:text-[15px]">{t.groups.text}</p>
+    <section id={mobileId("life")} aria-labelledby="m-life-title" className="scroll-mt-16 py-2">
+      <div className={container}>
+        <div className="relative overflow-hidden rounded-[22px] bg-sun-soft/60 p-3 min-[390px]:p-4 md:p-6">
+          <div aria-hidden="true" className="pointer-events-none absolute -bottom-12 -left-10 size-36 rounded-full bg-leaf-soft" />
+          <Cloud className="absolute -right-3 top-3 w-16 opacity-90" />
 
-        <ul className="relative mt-4 grid gap-2 md:grid-cols-3 md:gap-3">
-          {groupCards.map(([key, card]) => {
-            const Icon = groupIcons[key];
-            return (
-              <li key={key} className="flex items-center gap-3 rounded-2xl bg-white/90 px-3.5 py-3 md:block md:p-4">
-                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-sun text-ink">
-                  <Icon className="size-5" />
-                </span>
-                <span className="min-w-0 md:mt-2.5 md:block">
-                  <span className="block font-display text-base font-extrabold leading-tight text-ink md:text-lg">
+          <h2 id="m-life-title" className="relative pr-12 text-[24px] font-extrabold leading-tight text-ink md:text-[28px]">
+            {t.life.title}
+          </h2>
+          <p className="relative mt-2 text-sm leading-relaxed text-ink-soft md:text-[15px]">{t.life.lead}</p>
+
+          <ul ref={ref} {...revealProps} className="relative mt-4 grid grid-cols-1 gap-2 min-[340px]:grid-cols-2 min-[390px]:gap-2.5 md:grid-cols-4 md:gap-3">
+            {cards.map(([key, card], i) => {
+              const Icon = lifeIcons[key];
+              return (
+                <li
+                  key={key}
+                  style={{ "--reveal-i": i } as CSSProperties}
+                  className="reveal-item card min-w-0 rounded-2xl p-3 break-words hover:-translate-y-0.5 md:p-4"
+                >
+                  <span
+                    className={`inline-flex size-9 items-center justify-center rounded-xl ${
+                      i % 2 === 0 ? "bg-sun text-ink" : "bg-leaf-soft text-leaf-deep"
+                    }`}
+                  >
+                    <Icon className="size-5" />
+                  </span>
+                  <span className="mt-2 block font-display text-[15px] font-extrabold leading-tight text-ink min-[390px]:text-base">
                     {card.value}
                   </span>
-                  <span className="mt-0.5 block text-[13px] leading-snug text-ink-soft">{card.text}</span>
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-
-        {site.groups.length > 0 && (
-          <div className="relative mt-4">
-            <h3 className="text-[15px] font-extrabold text-ink">{t.groups.listTitle}</h3>
-            <ul className="mt-2 grid grid-cols-2 gap-2">
-              {site.groups.map((group) => (
-                <li key={group.name.kk} className="rounded-xl bg-white/85 px-3 py-2.5">
-                  <span className="block text-sm font-bold text-ink">{group.name[locale]}</span>
-                  {group.description && (
-                    <span className="mt-0.5 block text-xs text-ink-soft">{group.description[locale]}</span>
-                  )}
+                  <span className="mt-1 block text-[12.5px] leading-snug text-ink-soft min-[390px]:text-[13px]">{card.text}</span>
                 </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </section>
+              );
+            })}
+          </ul>
 
-      <section id={mobileId("food")} aria-labelledby="m-food-title" className="card scroll-mt-20 p-5">
-        <p className="kicker">{t.food.kicker}</p>
-        <div className="mt-2 flex items-center gap-3">
-          <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-leaf-soft text-leaf-deep">
-            <BowlIcon className="size-6" />
-          </span>
-          <h2 id="m-food-title" className="text-[22px] font-extrabold leading-tight text-ink md:text-2xl">
-            {t.food.title}
-          </h2>
+          {site.groups.length > 0 && (
+            <div className="relative mt-4">
+              <h3 className="text-[15px] font-extrabold text-ink">{t.life.listTitle}</h3>
+              <ul className="mt-2 grid grid-cols-2 gap-2">
+                {site.groups.map((group) => (
+                  <li key={group.name.kk} className="rounded-xl bg-white/85 px-3 py-2.5">
+                    <span className="block text-sm font-bold text-ink">{group.name[locale]}</span>
+                    {group.description && (
+                      <span className="mt-0.5 block text-xs text-ink-soft">{group.description[locale]}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-        <p className="mt-3 text-sm leading-relaxed text-ink-soft md:text-[15px]">{t.food.text}</p>
-        <p className="mt-4 flex items-center gap-3 rounded-2xl bg-leaf-soft/70 px-3.5 py-3">
-          <span className="flex shrink-0 gap-0.5" aria-hidden="true">
-            {[0, 1, 2, 3].map((i) => (
-              <SunMark key={i} className="size-[18px]" />
-            ))}
-          </span>
-          <span className="font-display text-[15px] font-extrabold leading-tight text-leaf-deep">{t.food.accent}</span>
-        </p>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 }
 

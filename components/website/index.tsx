@@ -5,7 +5,7 @@ import { About } from "./about";
 import { Contacts, Documents } from "./contacts";
 import { Footer } from "./footer";
 import { Gallery } from "./gallery";
-import { GroupsFood } from "./groups-food";
+import { Life } from "./life";
 import { Header } from "./header";
 import { Hero } from "./hero";
 
@@ -17,7 +17,7 @@ export function DesktopWebsite({ photos }: { photos: PagePhotos }) {
       <main id="main">
         <Hero photo={photos.main} />
         <About photo={photos.about} />
-        <GroupsFood />
+        <Life />
         <Gallery />
         <Documents />
         <Contacts />

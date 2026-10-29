@@ -77,7 +77,7 @@ export const site = {
   documentsUrl: "",
 
   /**
-   * Описания групп. Пока список пуст, показывается общий блок «8 топ / 8 групп».
+   * Описания групп. Если список заполнен, он выводится в разделе «Топтар және тамақтану / Группы и питание» под карточками.
    * Пример элемента: { name: { kk: "Балапан", ru: "Балапан" }, description: { kk: "...", ru: "..." } }
    */
   groups: [] as GroupInfo[],
@@ -109,8 +109,7 @@ export const mapLinks = {
 export const sectionIds = [
   "home",
   "about",
-  "groups",
-  "food",
+  "life",
   "gallery",
   "documents",
   "contacts",

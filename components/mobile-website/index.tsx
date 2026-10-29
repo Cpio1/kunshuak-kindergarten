@@ -4,7 +4,7 @@ import type { PagePhotos } from "@/lib/site-data";
 import { MobileFooter } from "./footer";
 import { MobileHeader, mobileId } from "./header";
 import { MobileHero } from "./hero";
-import { MobileAbout, MobileContacts, MobileDocuments, MobileGallery, MobileGroupsFood } from "./sections";
+import { MobileAbout, MobileContacts, MobileDocuments, MobileGallery, MobileLife } from "./sections";
 
 /** Версия для телефона и планшета (до 1024 px). */
 export function MobileWebsite({ photos }: { photos: PagePhotos }) {
@@ -14,7 +14,7 @@ export function MobileWebsite({ photos }: { photos: PagePhotos }) {
       <main id={mobileId("main")}>
         <MobileHero photo={photos.main} />
         <MobileAbout photo={photos.about} />
-        <MobileGroupsFood />
+        <MobileLife />
         <MobileGallery />
         <MobileDocuments />
         <MobileContacts />
