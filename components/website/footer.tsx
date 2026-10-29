@@ -2,6 +2,7 @@
 
 import { site } from "@/lib/site-data";
 import { CurrentYear } from "@/components/shared/current-year";
+import { Wave } from "@/components/shared/decor";
 import { Logo } from "@/components/shared/logo";
 import { useLanguage } from "@/components/shared/language-provider";
 
@@ -9,7 +10,9 @@ export function Footer() {
   const { locale, t } = useLanguage();
 
   return (
-    <footer className="border-t border-line bg-cream/60">
+    <footer>
+      <Wave className="h-7 text-butter" />
+      <div className="bg-butter">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-6 px-8 py-6 text-sm text-ink-soft">
         <p className="flex items-center gap-2">
           <Logo size={40} />
@@ -35,6 +38,7 @@ export function Footer() {
             </a>
           </li>
         </ul>
+      </div>
       </div>
     </footer>
   );

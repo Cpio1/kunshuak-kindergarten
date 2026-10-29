@@ -4,6 +4,7 @@ import { site, type ImageFile } from "@/lib/site-data";
 import { HeroVisual } from "@/components/shared/hero-visual";
 import { ArrowDownIcon, PhoneIcon, PinIcon } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
+import { cardShape } from "@/components/shared/shapes";
 
 export function Hero({ photo }: { photo: ImageFile | null }) {
   const { locale, t } = useLanguage();
@@ -44,8 +45,11 @@ export function Hero({ photo }: { photo: ImageFile | null }) {
           </div>
 
           <ul className="mt-8 grid max-w-[36rem] grid-cols-4 gap-2.5">
-            {t.hero.stats.map((stat) => (
-              <li key={stat.label} className="rounded-2xl border border-line bg-white/80 px-3 py-2.5">
+            {t.hero.stats.map((stat, i) => (
+              <li
+                key={stat.label}
+                className={`${cardShape(i)} border border-line bg-white/80 px-3 py-2.5 [--shape-big:18px] [--shape-small:6px]`}
+              >
                 <span className="block font-display text-[15px] font-extrabold leading-tight text-ink">
                   {stat.value}
                 </span>

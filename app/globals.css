@@ -3,6 +3,8 @@
 @theme {
   --color-milk: #fffbf2;
   --color-cream: #fff3d6;
+  /* Сливочная полоса разделов и подвала (= cream 60 % поверх milk) */
+  --color-butter: #fff6e1;
   --color-sun: #ffc42e;
   --color-sun-soft: #ffe8a8;
   --color-sun-deep: #e09b00;
@@ -61,6 +63,7 @@
 
 @layer components {
   .btn-primary {
+    border-radius: 9999px;
     background: var(--color-sun);
     color: var(--color-ink);
     box-shadow: 0 6px 16px -8px rgb(224 155 0 / 0.7);
@@ -74,6 +77,7 @@
   }
 
   .btn-secondary {
+    border-radius: 9999px;
     background: #fff;
     color: var(--color-ink);
     border: 1px solid var(--color-line);
@@ -89,6 +93,37 @@
     border: 1px solid var(--color-line);
     border-radius: 1.25rem;
     box-shadow: var(--shadow-soft);
+  }
+
+  /*
+   * Словарь форм. Все крупные блоки — «лепесток»: два противоположных угла скруглены сильнее.
+   * shape-petal и shape-leaf — зеркальные пары, их чередуют в сетках. Размер углов задают
+   * --shape-big и --shape-small, поэтому одна и та же форма подходит и для телефона, и для компьютера.
+   */
+  .shape-petal {
+    border-radius: var(--shape-big, 26px) var(--shape-small, 10px);
+  }
+  .shape-leaf {
+    border-radius: var(--shape-small, 10px) var(--shape-big, 26px);
+  }
+  /* Арка для фотографии: полукруглый верх, мягкий низ. Проценты, чтобы радиусы не «схлопывались». */
+  .shape-arch {
+    border-radius: 50% 50% 7% 7% / 38% 38% 6% 6%;
+  }
+  /* Галька: подложка фото main-page2. С отступом 13 % углы снимка гарантированно внутри формы. */
+  .shape-pebble {
+    border-radius: 34% 40% 36% 42% / 38% 34% 42% 36%;
+  }
+
+  /* Подложки иконок: круг (rounded-full), клякса, лепесток-капля и листик */
+  .icon-blob {
+    border-radius: 62% 38% 54% 46% / 48% 58% 42% 52%;
+  }
+  .icon-petal {
+    border-radius: 50% 50% 50% 14%;
+  }
+  .icon-leaf {
+    border-radius: 14% 50%;
   }
 
   .kicker {
@@ -123,26 +158,29 @@
   transform: translateY(16px);
 }
 
-/* Тарелка блока «Питание» (components/shared/meals-plate.tsx): вращается только пунктир, иконки покачиваются */
+/* Тарелка блока «Питание» (components/shared/meals-plate.tsx): орбита с карточками вращается по часовой стрелке,
+   карточки — в обратную сторону с той же скоростью, поэтому иконки всегда стоят вертикально */
 .meal-orbit {
-  animation: meal-orbit 60s linear infinite;
+  animation: meal-orbit 30s linear infinite;
 }
-.meal-bob {
-  animation: meal-bob 4.4s ease-in-out infinite;
-  animation-delay: var(--bob-delay, 0s);
+.meal-upright {
+  transform: rotate(calc(-1 * var(--meal-angle, 0deg)));
+  animation: meal-upright 30s linear infinite;
 }
 @keyframes meal-orbit {
+  from {
+    transform: rotate(0deg);
+  }
   to {
-    rotate: 360deg;
+    transform: rotate(360deg);
   }
 }
-@keyframes meal-bob {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-5deg);
+@keyframes meal-upright {
+  from {
+    transform: rotate(calc(-1 * var(--meal-angle, 0deg)));
   }
-  50% {
-    transform: translateY(-7%) rotate(5deg);
+  to {
+    transform: rotate(calc(-1 * var(--meal-angle, 0deg) - 360deg));
   }
 }
 
@@ -151,7 +189,7 @@
     scroll-behavior: auto;
   }
   .meal-orbit,
-  .meal-bob {
+  .meal-upright {
     animation: none;
   }
   *,

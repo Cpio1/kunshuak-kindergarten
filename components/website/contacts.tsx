@@ -1,9 +1,11 @@
 "use client";
 
 import { mapLinks, site } from "@/lib/site-data";
+import { CardUnderlay, Cloud } from "@/components/shared/decor";
 import { DocumentsAction, useDocumentsText } from "@/components/shared/documents-action";
 import { ClockIcon, ExternalIcon, FolderIcon, InstagramIcon, PhoneIcon, PinIcon } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
+import { iconShape } from "@/components/shared/shapes";
 import { TwoGisMap } from "@/components/shared/two-gis-map";
 
 export function Documents() {
@@ -13,8 +15,10 @@ export function Documents() {
   return (
     <section id="documents" aria-labelledby="documents-title" className="scroll-mt-24 pb-6">
       <div className="mx-auto max-w-[1200px] px-8">
-        <div className="card flex items-center gap-5 px-7 py-5">
-          <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-sun-soft text-ink">
+        <div className="relative isolate">
+        <CardUnderlay variant="sun" />
+        <div className="card shape-leaf relative flex items-center gap-5 px-7 py-5 [--shape-big:36px] [--shape-small:14px]">
+          <span className="icon-blob inline-flex size-14 shrink-0 items-center justify-center bg-sun-soft text-ink">
             <FolderIcon className="size-7" />
           </span>
           <div className="min-w-0 flex-1">
@@ -24,6 +28,7 @@ export function Documents() {
             <p className="mt-0.5 text-[15px] text-ink-soft">{text}</p>
           </div>
           <DocumentsAction className="shrink-0" />
+        </div>
         </div>
       </div>
     </section>
@@ -64,16 +69,19 @@ export function Contacts() {
 
   return (
     <section id="contacts" className="scroll-mt-16 py-12 xl:py-14">
-      <div className="mx-auto max-w-[1200px] px-8">
+      <div className="relative mx-auto max-w-[1200px] px-8">
+        <Cloud className="absolute right-10 top-2 w-24" fill="var(--color-leaf-soft)" />
         <p className="kicker">{t.contacts.kicker}</p>
         <h2 className="mt-3 text-[34px] font-extrabold leading-tight text-ink xl:text-[38px]">{t.contacts.title}</h2>
 
         <div className="mt-6 grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-6">
-          <div className="card flex flex-col p-6">
+          <div className="relative isolate">
+          <CardUnderlay variant="blob" />
+          <div className="card shape-petal relative flex h-full flex-col p-6 [--shape-big:36px] [--shape-small:14px]">
             <ul className="flex flex-col gap-4">
-              {rows.map(({ icon: Icon, label, content }) => (
+              {rows.map(({ icon: Icon, label, content }, i) => (
                 <li key={label} className="flex gap-3.5">
-                  <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-leaf-soft text-leaf-deep">
+                  <span className={`inline-flex size-11 shrink-0 items-center justify-center bg-leaf-soft text-leaf-deep ${iconShape(i)}`}>
                     <Icon className="size-5" />
                   </span>
                   <span className="min-w-0 text-[15px] leading-snug text-ink">
@@ -90,6 +98,7 @@ export function Contacts() {
               <PhoneIcon className="size-5" />
               {t.header.call}
             </a>
+          </div>
           </div>
 
           <div className="flex flex-col gap-3">

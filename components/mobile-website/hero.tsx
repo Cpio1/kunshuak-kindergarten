@@ -4,6 +4,7 @@ import { site, type ImageFile } from "@/lib/site-data";
 import { HeroVisual } from "@/components/shared/hero-visual";
 import { ArrowDownIcon, PhoneIcon, PinIcon } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
+import { cardShape } from "@/components/shared/shapes";
 import { mobileId } from "./header";
 
 export function MobileHero({ photo }: { photo: ImageFile | null }) {
@@ -55,8 +56,11 @@ export function MobileHero({ photo }: { photo: ImageFile | null }) {
         </div>
 
         <ul className="mt-5 grid grid-cols-2 gap-2 md:col-span-2 md:mt-2 md:grid-cols-4">
-          {t.hero.stats.map((stat) => (
-            <li key={stat.label} className="rounded-2xl border border-line bg-white/85 px-3 py-2.5">
+          {t.hero.stats.map((stat, i) => (
+            <li
+              key={stat.label}
+              className={`${cardShape(i)} border border-line bg-white/85 px-3 py-2.5 [--shape-big:16px] [--shape-small:6px]`}
+            >
               <span className="block font-display text-[15px] font-extrabold leading-tight text-ink">{stat.value}</span>
               <span className="mt-0.5 block text-xs leading-tight text-ink-soft">{stat.label}</span>
             </li>

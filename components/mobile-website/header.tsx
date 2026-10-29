@@ -82,7 +82,7 @@ export function MobileHeader() {
                 <a
                   href={`#${mobileId(id)}`}
                   onClick={() => setOpen(false)}
-                  className="flex min-h-11 items-center rounded-xl bg-white px-3.5 text-[15px] font-semibold text-ink ring-1 ring-line"
+                  className="flex min-h-11 items-center rounded-full bg-white px-4 text-[15px] font-semibold text-ink ring-1 ring-line"
                 >
                   {t.nav[id]}
                 </a>

@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { mapLinks, site, type ImageFile } from "@/lib/site-data";
-import { Cloud } from "@/components/shared/decor";
+import { CardUnderlay, Sun, Wave } from "@/components/shared/decor";
 import { DocumentsAction, useDocumentsText } from "@/components/shared/documents-action";
 import { GalleryEmpty, GalleryRowFiller, GalleryThumb, Lightbox, justifiedItemStyle, useGallery } from "@/components/shared/gallery";
 import {
@@ -19,7 +19,8 @@ import {
 } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
 import { MealsPlate } from "@/components/shared/meals-plate";
-import { SectionPhoto } from "@/components/shared/section-photo";
+import { PebblePhoto } from "@/components/shared/section-photo";
+import { cardShape, iconShape } from "@/components/shared/shapes";
 import { TwoGisMap } from "@/components/shared/two-gis-map";
 import { useReveal } from "@/components/shared/use-reveal";
 import { mobileId } from "./header";
@@ -35,18 +36,21 @@ export function MobileAbout({ photo }: { photo: ImageFile | null }) {
   const cards = Object.entries(t.about.cards) as [keyof typeof cardIcons, { label: string; value: string }][];
 
   return (
-    <section id={mobileId("about")} className="scroll-mt-14 py-8">
+    <section id={mobileId("about")} className="scroll-mt-14">
+      <Wave className="h-4 text-butter md:h-6" />
+      <div className="bg-butter py-6">
       <div className={container}>
         <p className="kicker">{t.about.kicker}</p>
         <h2 className={sectionTitle}>{t.about.title}</h2>
         <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{t.about.text}</p>
         {photo && (
           <div className="mt-4 flex justify-center">
-            <SectionPhoto
+            <PebblePhoto
               photo={photo}
               alt={t.about.photoAlt}
-              sizes="(min-width: 768px) 420px, 92vw"
-              className="max-h-[240px] md:max-h-[300px]"
+              sizes="(min-width: 768px) 230px, 56vw"
+              className="w-[min(260px,76vw)] md:w-[300px]"
+              compact
             />
           </div>
         )}
@@ -54,9 +58,9 @@ export function MobileAbout({ photo }: { photo: ImageFile | null }) {
           {cards.map(([key, card], i) => {
             const Icon = cardIcons[key];
             return (
-              <li key={key} className="card p-3.5">
+              <li key={key} className={`card ${cardShape(i)} p-3.5 [--shape-big:20px] [--shape-small:8px]`}>
                 <span
-                  className={`inline-flex size-9 items-center justify-center rounded-xl ${
+                  className={`inline-flex size-9 items-center justify-center ${iconShape(i)} ${
                     i % 2 === 0 ? "bg-sun-soft text-ink" : "bg-leaf-soft text-leaf-deep"
                   }`}
                 >
@@ -71,11 +75,14 @@ export function MobileAbout({ photo }: { photo: ImageFile | null }) {
           })}
         </ul>
       </div>
+      </div>
+      <Wave flip className="h-4 text-butter md:h-6" />
     </section>
   );
 }
 
 const lifeIcons = { groups: UsersIcon, ages: BalloonIcon, language: ChatIcon } as const;
+const lifeUnderlays = ["circle", "hill", "cloud"] as const;
 
 /** «Топтар және тамақтану / Группы и питание»: группы, возраст, язык и питание — одним разделом. */
 export function MobileLife() {
@@ -87,9 +94,8 @@ export function MobileLife() {
   return (
     <section id={mobileId("life")} aria-labelledby="m-life-title" className="scroll-mt-16 py-2">
       <div className={container}>
-        <div className="relative overflow-hidden rounded-[22px] bg-sun-soft/60 p-3 min-[390px]:p-4 md:p-6">
+        <div className="shape-petal relative overflow-hidden bg-sun-soft/60 p-3 [--shape-big:44px] [--shape-small:18px] min-[390px]:p-4 md:p-6">
           <div aria-hidden="true" className="pointer-events-none absolute -bottom-12 -left-10 size-36 rounded-full bg-leaf-soft" />
-          <Cloud className="absolute -right-3 top-3 w-16 opacity-90" />
 
           <h2 id="m-life-title" className="relative pr-12 text-[24px] font-extrabold leading-tight text-ink md:text-[28px]">
             {t.life.title}
@@ -103,12 +109,14 @@ export function MobileLife() {
                 <li
                   key={key}
                   style={{ "--reveal-i": i } as CSSProperties}
-                  className={`reveal-item card min-w-0 rounded-2xl p-3 break-words hover:-translate-y-0.5 md:p-4 ${
+                  className={`reveal-item relative isolate min-w-0 hover:-translate-y-0.5 ${
                     i === cards.length - 1 && cards.length % 2 === 1 ? "min-[340px]:col-span-2 md:col-span-1" : ""
                   }`}
                 >
+                  <CardUnderlay variant={lifeUnderlays[i % lifeUnderlays.length]} compact />
+                  <div className={`card ${cardShape(i)} relative h-full p-3 break-words [--shape-big:20px] [--shape-small:8px] md:p-4`}>
                   <span
-                    className={`inline-flex size-9 items-center justify-center rounded-xl ${
+                    className={`inline-flex size-9 items-center justify-center ${iconShape(i)} ${
                       i % 2 === 0 ? "bg-sun text-ink" : "bg-leaf-soft text-leaf-deep"
                     }`}
                   >
@@ -118,6 +126,7 @@ export function MobileLife() {
                     {card.value}
                   </span>
                   <span className="mt-1 block text-[12.5px] leading-snug text-ink-soft min-[390px]:text-[13px]">{card.text}</span>
+                  </div>
                 </li>
               );
             })}
@@ -128,7 +137,7 @@ export function MobileLife() {
               <h3 className="text-[15px] font-extrabold text-ink">{t.life.listTitle}</h3>
               <ul className="mt-2 grid grid-cols-2 gap-2">
                 {site.groups.map((group) => (
-                  <li key={group.name.kk} className="rounded-xl bg-white/85 px-3 py-2.5">
+                  <li key={group.name.kk} className="shape-leaf bg-white/85 px-3 py-2.5 [--shape-big:16px] [--shape-small:6px]">
                     <span className="block text-sm font-bold text-ink">{group.name[locale]}</span>
                     {group.description && (
                       <span className="mt-0.5 block text-xs text-ink-soft">{group.description[locale]}</span>
@@ -142,14 +151,14 @@ export function MobileLife() {
           <div
             ref={mealsRef}
             {...mealsRevealProps}
-            className="relative mt-4 rounded-[18px] bg-leaf-soft px-4 pb-3 pt-4 md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-6 md:px-6 md:py-4"
+            className="shape-leaf relative mt-4 bg-leaf-soft px-4 pb-3 pt-4 [--shape-big:40px] [--shape-small:16px] md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-6 md:px-6 md:py-4"
           >
             <div className="reveal-item">
               <p className="kicker">{t.life.meals.kicker}</p>
               <h3 className="mt-1.5 text-[20px] font-extrabold leading-tight text-ink md:text-[24px]">{t.life.meals.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink-soft md:text-[15px]">{t.life.meals.text}</p>
             </div>
-            <MealsPlate className="reveal-item mx-auto mt-2 w-full max-w-[230px] md:mt-0 md:w-[230px]" />
+            <MealsPlate className="reveal-item mx-auto mt-2 w-full max-w-[256px] md:mt-0 md:w-[256px]" />
           </div>
         </div>
       </div>
@@ -167,7 +176,8 @@ export function MobileGallery() {
 
   return (
     <section id={mobileId("gallery")} className="scroll-mt-14 py-8">
-      <div className={container}>
+      <div className={`relative ${container}`}>
+        <Sun className="absolute right-5 top-0 w-9 md:w-11" />
         <p className="kicker">{t.gallery.kicker}</p>
         <h2 className={sectionTitle}>{t.gallery.title}</h2>
 
@@ -215,9 +225,11 @@ export function MobileDocuments() {
   return (
     <section id={mobileId("documents")} aria-labelledby="m-documents-title" className="scroll-mt-20 py-2">
       <div className={container}>
-        <div className="card p-5 md:flex md:items-center md:gap-4">
+        <div className="relative isolate">
+        <CardUnderlay variant="sun" compact />
+        <div className="card shape-leaf relative p-5 [--shape-big:28px] [--shape-small:10px] md:flex md:items-center md:gap-4">
           <div className="flex items-center gap-3.5 md:flex-1">
-            <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-sun-soft text-ink">
+            <span className="icon-blob inline-flex size-12 shrink-0 items-center justify-center bg-sun-soft text-ink">
               <FolderIcon className="size-6" />
             </span>
             <div className="min-w-0">
@@ -228,6 +240,7 @@ export function MobileDocuments() {
             </div>
           </div>
           <DocumentsAction className="mt-4 w-full md:mt-0 md:w-auto" />
+        </div>
         </div>
       </div>
     </section>
@@ -272,10 +285,10 @@ export function MobileContacts() {
         <p className="kicker">{t.contacts.kicker}</p>
         <h2 className={sectionTitle}>{t.contacts.title}</h2>
 
-        <ul className="card mt-4 divide-y divide-line px-4 md:grid md:grid-cols-2 md:gap-x-6 md:divide-y-0 md:py-2">
-          {rows.map(({ icon: Icon, label, content }) => (
+        <ul className="card shape-petal mt-4 divide-y divide-line px-4 [--shape-big:28px] [--shape-small:10px] md:grid md:grid-cols-2 md:gap-x-6 md:divide-y-0 md:py-2">
+          {rows.map(({ icon: Icon, label, content }, i) => (
             <li key={label} className="flex gap-3 py-3.5">
-              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-leaf-soft text-leaf-deep">
+              <span className={`inline-flex size-10 shrink-0 items-center justify-center bg-leaf-soft text-leaf-deep ${iconShape(i)}`}>
                 <Icon className="size-5" />
               </span>
               <span className="min-w-0 text-[15px] leading-snug text-ink">

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Photo } from "@/lib/site-data";
 import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, ImageIcon } from "./icons";
 import { useLanguage } from "./language-provider";
+import { galleryShape } from "./shapes";
 
 /** Состояние галереи: сколько фото видно и какое открыто в просмотрщике. */
 export function useGallery(photos: Photo[], initialCount: number) {
@@ -41,7 +42,7 @@ export function GalleryEmpty({ className = "" }: { className?: string }) {
   const { t } = useLanguage();
   return (
     <p
-      className={`flex items-center gap-3 rounded-2xl border border-dashed border-sun-deep/40 bg-white/70 px-5 py-4 text-ink-soft ${className}`}
+      className={`shape-petal flex items-center gap-3 border border-dashed border-sun-deep/40 bg-white/70 px-5 py-4 text-ink-soft ${className}`}
     >
       <ImageIcon className="size-6 shrink-0 text-sun-deep" />
       <span className="font-semibold">{t.gallery.empty}</span>
@@ -49,7 +50,7 @@ export function GalleryEmpty({ className = "" }: { className?: string }) {
   );
 }
 
-/** Миниатюра без обрезки: сохраняет исходные пропорции снимка. */
+/** Миниатюра без обрезки: сохраняет исходные пропорции снимка; форма углов чередуется по номеру. */
 export function GalleryThumb({
   photo,
   index,
@@ -66,7 +67,7 @@ export function GalleryThumb({
     <button
       type="button"
       onClick={() => onOpen(index)}
-      className="group block w-full overflow-hidden rounded-xl bg-cream shadow-soft"
+      className={`group block w-full overflow-hidden bg-cream shadow-soft ${galleryShape(index)}`}
       aria-label={`${t.gallery.open}: ${photo.alt[locale]}`}
     >
       <Image

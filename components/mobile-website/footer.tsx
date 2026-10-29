@@ -2,6 +2,7 @@
 
 import { site } from "@/lib/site-data";
 import { CurrentYear } from "@/components/shared/current-year";
+import { Wave } from "@/components/shared/decor";
 import { Logo } from "@/components/shared/logo";
 import { useLanguage } from "@/components/shared/language-provider";
 import { mobileId } from "./header";
@@ -10,7 +11,9 @@ export function MobileFooter() {
   const { locale, t } = useLanguage();
 
   return (
-    <footer className="mt-4 border-t border-line bg-cream/60">
+    <footer className="mt-4">
+      <Wave className="h-4 text-butter" />
+      <div className="bg-butter">
       <div className="mx-auto max-w-3xl px-4 py-5 text-sm text-ink-soft">
         <p className="flex items-center gap-2">
           <Logo size={40} />
@@ -31,6 +34,7 @@ export function MobileFooter() {
             </a>
           </li>
         </ul>
+      </div>
       </div>
     </footer>
   );

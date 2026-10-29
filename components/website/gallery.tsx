@@ -2,6 +2,7 @@
 
 import { site } from "@/lib/site-data";
 import { GalleryEmpty, GalleryRowFiller, GalleryThumb, Lightbox, justifiedItemStyle, useGallery } from "@/components/shared/gallery";
+import { Cloud, Sun } from "@/components/shared/decor";
 import { ChevronDownIcon } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
 
@@ -15,7 +16,9 @@ export function Gallery() {
 
   return (
     <section id="gallery" className="scroll-mt-16 py-14 xl:py-16">
-      <div className="mx-auto max-w-[1200px] px-8">
+      <div className="relative mx-auto max-w-[1200px] px-8">
+        <Sun className="absolute right-24 top-0 w-14" />
+        <Cloud className="absolute right-6 top-9 w-24" fill="var(--color-sun-soft)" />
         <p className="kicker">{t.gallery.kicker}</p>
         <h2 className="mt-3 text-[34px] font-extrabold leading-tight text-ink xl:text-[38px]">{t.gallery.title}</h2>
 

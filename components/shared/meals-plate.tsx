@@ -4,50 +4,60 @@ import type { CSSProperties, ReactNode } from "react";
 import { useLanguage } from "./language-provider";
 
 /**
- * Декоративная тарелка блока «Питание»: цифра в центре, пунктирная окружность и иконки продуктов.
+ * Декоративная тарелка блока «Питание»: цифра в центре, пунктирная окружность и иконки продуктов на орбите.
  * Размер задаёт className (ширина); всё внутри масштабируется от ширины контейнера (единицы cqw).
  * Текст на тарелке повторяет заголовок блока, поэтому вся композиция скрыта от экранных дикторов.
+ *
+ * Геометрия в процентах от стороны контейнера: тарелка — 63 %, орбита — радиус 42 %, карточка — 16 %.
+ * Внешний край карточки — 42 + 8 = 50 %, поэтому при любом угле она не выходит за контейнер.
  */
 export function MealsPlate({ className = "" }: { className?: string }) {
   const { t } = useLanguage();
 
   return (
     <div aria-hidden="true" className={`@container pointer-events-none relative aspect-square select-none ${className}`}>
-      <svg viewBox="0 0 100 100" className="meal-orbit absolute inset-0 size-full" focusable="false">
-        <circle cx="50" cy="50" r="48" fill="none" stroke="var(--color-leaf-deep)" strokeOpacity="0.45" strokeWidth="0.6" strokeDasharray="2.2 2.4" strokeLinecap="round" />
-      </svg>
+      {/* Солнечный бортик и молочная тарелка — неподвижны */}
+      <div className="absolute inset-[18.5%] rounded-full bg-sun shadow-[0_18px_36px_-18px_rgb(74_56_12/0.55)]" />
+      <div className="absolute inset-[21.65%] rounded-full bg-milk" />
+      <div className="absolute inset-[26.6%] rounded-full border border-sun-soft bg-milk shadow-[inset_0_2px_10px_rgb(224_155_0/0.12)]" />
 
-      {/* Солнечный бортик и молочная тарелка */}
-      <div className="absolute inset-[15%] rounded-full bg-sun shadow-[0_18px_36px_-18px_rgb(74_56_12/0.55)]" />
-      <div className="absolute inset-[18.5%] rounded-full bg-milk" />
-      <div className="absolute inset-[24%] rounded-full border border-sun-soft bg-milk shadow-[inset_0_2px_10px_rgb(224_155_0/0.12)]" />
-
-      <div className="absolute inset-[24%] flex flex-col items-center justify-center text-center">
-        <span className="font-display text-[23cqw] font-black leading-[0.9] text-leaf-deep">4</span>
-        <span className="mt-[1.5cqw] font-display text-[6.2cqw] font-extrabold leading-tight text-ink">{t.life.meals.plateUnit}</span>
-        <span className="text-[5.3cqw] font-semibold leading-tight text-ink-soft">{t.life.meals.plateNote}</span>
+      <div className="absolute inset-[26.6%] flex flex-col items-center justify-center text-center">
+        <span className="font-display text-[20.7cqw] font-black leading-[0.9] text-leaf-deep">4</span>
+        <span className="mt-[1.35cqw] font-display text-[5.58cqw] font-extrabold leading-tight text-ink">{t.life.meals.plateUnit}</span>
+        <span className="text-[4.77cqw] font-semibold leading-tight text-ink-soft">{t.life.meals.plateNote}</span>
       </div>
 
-      {foods.map(({ key, position, delay, icon }) => (
-        <span key={key} className={`absolute size-[19%] ${position}`}>
-          <span
-            className="meal-bob flex size-full items-center justify-center rounded-full bg-white shadow-[0_8px_18px_-10px_rgb(74_56_12/0.45)]"
-            style={{ "--bob-delay": delay } as CSSProperties}
-          >
-            {icon}
-          </span>
-        </span>
-      ))}
+      {/* Орбита: вращается вся обёртка вместе с пунктиром и карточками */}
+      <div className="meal-orbit absolute inset-0">
+        <svg viewBox="0 0 100 100" className="absolute inset-0 size-full" focusable="false">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="var(--color-leaf-deep)" strokeOpacity="0.45" strokeWidth="0.6" strokeDasharray="2.2 2.4" strokeLinecap="round" />
+        </svg>
+
+        {foods.map(({ key, angle, icon }) => (
+          // Позиционирование: постоянный поворот на угол карточки, сама карточка — в верхней точке орбиты.
+          <div key={key} className="absolute inset-0" style={{ transform: `rotate(${angle}deg)` }}>
+            <span className="absolute left-1/2 top-[8%] size-[16%] -translate-x-1/2 -translate-y-1/2">
+              {/* Обратный поворот (угол + вращение орбиты) держит иконку вертикально */}
+              <span
+                className="meal-upright flex size-full items-center justify-center rounded-full bg-white shadow-[0_8px_18px_-10px_rgb(74_56_12/0.45)]"
+                style={{ "--meal-angle": `${angle}deg` } as CSSProperties}
+              >
+                {icon}
+              </span>
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-/** Иконки стоят на пунктирной окружности под углом 45°: центр в 16 % от краёв, поэтому не выходят за контейнер. */
-const foods: { key: string; position: string; delay: string; icon: ReactNode }[] = [
-  { key: "apple", position: "left-[6.5%] top-[6.5%]", delay: "0s", icon: <AppleArt /> },
-  { key: "carrot", position: "right-[6.5%] top-[6.5%]", delay: "-1.1s", icon: <CarrotArt /> },
-  { key: "milk", position: "bottom-[6.5%] right-[6.5%]", delay: "-2.2s", icon: <MilkArt /> },
-  { key: "grain", position: "bottom-[6.5%] left-[6.5%]", delay: "-3.3s", icon: <GrainArt /> },
+/** Четыре карточки через 90°, начальные позиции — по диагоналям, по часовой стрелке. */
+const foods: { key: string; angle: number; icon: ReactNode }[] = [
+  { key: "apple", angle: -45, icon: <AppleArt /> },
+  { key: "carrot", angle: 45, icon: <CarrotArt /> },
+  { key: "milk", angle: 135, icon: <MilkArt /> },
+  { key: "grain", angle: 225, icon: <GrainArt /> },
 ];
 
 const art = "size-[62%]";
