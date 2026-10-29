@@ -19,8 +19,16 @@
   --shadow-soft: 0 1px 2px rgb(74 56 12 / 0.05), 0 10px 28px -16px rgb(74 56 12 / 0.28);
 }
 
+/* Сайт только светлый: «only light» запрещает браузеру автоматически затемнять страницу
+   при тёмной системной теме. Тёмных вариантов (prefers-color-scheme, dark:) нет намеренно. */
+:root {
+  color-scheme: only light;
+}
+
 @layer base {
   html {
+    background: var(--color-milk);
+    color: var(--color-ink);
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
   }
@@ -77,6 +85,7 @@
 
   .card {
     background: #fff;
+    color: var(--color-ink);
     border: 1px solid var(--color-line);
     border-radius: 1.25rem;
     box-shadow: var(--shadow-soft);
