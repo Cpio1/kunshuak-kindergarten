@@ -3,16 +3,18 @@
 import type { CSSProperties } from "react";
 import { site } from "@/lib/site-data";
 import { Cloud } from "@/components/shared/decor";
-import { BalloonIcon, BowlIcon, ChatIcon, UsersIcon } from "@/components/shared/icons";
+import { BalloonIcon, ChatIcon, UsersIcon } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
+import { MealsPlate } from "@/components/shared/meals-plate";
 import { useReveal } from "@/components/shared/use-reveal";
 
-const cardIcons = { groups: UsersIcon, ages: BalloonIcon, language: ChatIcon, food: BowlIcon } as const;
+const cardIcons = { groups: UsersIcon, ages: BalloonIcon, language: ChatIcon } as const;
 
 /** «Топтар және тамақтану / Группы и питание»: группы, возраст, язык и питание — одним разделом. */
 export function Life() {
   const { locale, t } = useLanguage();
   const { ref, revealProps } = useReveal<HTMLUListElement>();
+  const { ref: mealsRef, revealProps: mealsRevealProps } = useReveal<HTMLDivElement>();
   const cards = Object.entries(t.life.cards) as [keyof typeof cardIcons, { value: string; text: string }][];
 
   return (
@@ -29,7 +31,7 @@ export function Life() {
             <p className="max-w-[30rem] text-[15px] leading-relaxed text-ink-soft">{t.life.lead}</p>
           </div>
 
-          <ul ref={ref} {...revealProps} className="relative mt-6 grid grid-cols-4 gap-4">
+          <ul ref={ref} {...revealProps} className="relative mt-6 grid grid-cols-3 gap-4">
             {cards.map(([key, card], i) => {
               const Icon = cardIcons[key];
               return (
@@ -69,6 +71,19 @@ export function Life() {
               </ul>
             </div>
           )}
+
+          <div
+            ref={mealsRef}
+            {...mealsRevealProps}
+            className="relative mt-6 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-10 rounded-[24px] bg-leaf-soft px-10 py-5"
+          >
+            <div className="reveal-item max-w-[30rem]">
+              <p className="kicker">{t.life.meals.kicker}</p>
+              <h3 className="mt-2 text-[28px] font-extrabold leading-tight text-ink xl:text-[30px]">{t.life.meals.title}</h3>
+              <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{t.life.meals.text}</p>
+            </div>
+            <MealsPlate className="reveal-item w-[270px] xl:w-[290px]" />
+          </div>
         </div>
       </div>
     </section>

@@ -123,9 +123,36 @@
   transform: translateY(16px);
 }
 
+/* Тарелка блока «Питание» (components/shared/meals-plate.tsx): вращается только пунктир, иконки покачиваются */
+.meal-orbit {
+  animation: meal-orbit 60s linear infinite;
+}
+.meal-bob {
+  animation: meal-bob 4.4s ease-in-out infinite;
+  animation-delay: var(--bob-delay, 0s);
+}
+@keyframes meal-orbit {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes meal-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-7%) rotate(5deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .meal-orbit,
+  .meal-bob {
+    animation: none;
   }
   *,
   *::before,

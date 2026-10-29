@@ -7,7 +7,6 @@ import { DocumentsAction, useDocumentsText } from "@/components/shared/documents
 import { GalleryEmpty, GalleryRowFiller, GalleryThumb, Lightbox, justifiedItemStyle, useGallery } from "@/components/shared/gallery";
 import {
   BalloonIcon,
-  BowlIcon,
   ChatIcon,
   ChevronDownIcon,
   ClockIcon,
@@ -19,6 +18,7 @@ import {
   UsersIcon,
 } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
+import { MealsPlate } from "@/components/shared/meals-plate";
 import { SectionPhoto } from "@/components/shared/section-photo";
 import { TwoGisMap } from "@/components/shared/two-gis-map";
 import { useReveal } from "@/components/shared/use-reveal";
@@ -75,12 +75,13 @@ export function MobileAbout({ photo }: { photo: ImageFile | null }) {
   );
 }
 
-const lifeIcons = { groups: UsersIcon, ages: BalloonIcon, language: ChatIcon, food: BowlIcon } as const;
+const lifeIcons = { groups: UsersIcon, ages: BalloonIcon, language: ChatIcon } as const;
 
 /** «Топтар және тамақтану / Группы и питание»: группы, возраст, язык и питание — одним разделом. */
 export function MobileLife() {
   const { locale, t } = useLanguage();
   const { ref, revealProps } = useReveal<HTMLUListElement>();
+  const { ref: mealsRef, revealProps: mealsRevealProps } = useReveal<HTMLDivElement>();
   const cards = Object.entries(t.life.cards) as [keyof typeof lifeIcons, { value: string; text: string }][];
 
   return (
@@ -95,14 +96,16 @@ export function MobileLife() {
           </h2>
           <p className="relative mt-2 text-sm leading-relaxed text-ink-soft md:text-[15px]">{t.life.lead}</p>
 
-          <ul ref={ref} {...revealProps} className="relative mt-4 grid grid-cols-1 gap-2 min-[340px]:grid-cols-2 min-[390px]:gap-2.5 md:grid-cols-4 md:gap-3">
+          <ul ref={ref} {...revealProps} className="relative mt-4 grid grid-cols-1 gap-2 min-[340px]:grid-cols-2 min-[390px]:gap-2.5 md:grid-cols-3 md:gap-3">
             {cards.map(([key, card], i) => {
               const Icon = lifeIcons[key];
               return (
                 <li
                   key={key}
                   style={{ "--reveal-i": i } as CSSProperties}
-                  className="reveal-item card min-w-0 rounded-2xl p-3 break-words hover:-translate-y-0.5 md:p-4"
+                  className={`reveal-item card min-w-0 rounded-2xl p-3 break-words hover:-translate-y-0.5 md:p-4 ${
+                    i === cards.length - 1 && cards.length % 2 === 1 ? "min-[340px]:col-span-2 md:col-span-1" : ""
+                  }`}
                 >
                   <span
                     className={`inline-flex size-9 items-center justify-center rounded-xl ${
@@ -135,6 +138,19 @@ export function MobileLife() {
               </ul>
             </div>
           )}
+
+          <div
+            ref={mealsRef}
+            {...mealsRevealProps}
+            className="relative mt-4 rounded-[18px] bg-leaf-soft px-4 pb-3 pt-4 md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-6 md:px-6 md:py-4"
+          >
+            <div className="reveal-item">
+              <p className="kicker">{t.life.meals.kicker}</p>
+              <h3 className="mt-1.5 text-[20px] font-extrabold leading-tight text-ink md:text-[24px]">{t.life.meals.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft md:text-[15px]">{t.life.meals.text}</p>
+            </div>
+            <MealsPlate className="reveal-item mx-auto mt-2 w-full max-w-[230px] md:mt-0 md:w-[230px]" />
+          </div>
         </div>
       </div>
     </section>
