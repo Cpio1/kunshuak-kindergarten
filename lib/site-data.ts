@@ -16,6 +16,20 @@ export type Photo = {
   alt: Localized;
 };
 
+/** Файл изображения без подписи — подпись берётся из переводов. */
+export type ImageFile = Omit<Photo, "alt">;
+
+/**
+ * Фотографии разделов. Находятся автоматически перед сборкой (scripts/detect-page-photos.mjs):
+ * main  — public/images/main-page.* (главный экран),
+ * about — public/images/main-page2.* (раздел «Біз туралы / О нас»).
+ * Подходят .jpg, .jpeg, .png, .webp, .avif; также ищется папка public/image.
+ */
+export type PagePhotos = {
+  main: ImageFile | null;
+  about: ImageFile | null;
+};
+
 export type GroupInfo = {
   name: Localized;
   description?: Localized;
@@ -33,11 +47,20 @@ export const site = {
     kk: "Алматы облысы, Талғар ауданы, Еркін ауылы, Маметова көшесі, 14",
     ru: "Алматинская область, Талгарский район, село Еркін, улица Маметова, 14",
   },
-  /** Строка для поиска на карте. Точные координаты не установлены. */
+  /** Карточка объекта в 2ГИС и данные для официального виджета (widgets.2gis.com). */
+  twoGis: {
+    url: "https://2gis.kz/almaty/geo/70000001024316818/77.031636,43.439782",
+    orgId: "70000001024316818",
+    city: "almaty",
+    lat: 43.439782,
+    lon: 77.031636,
+    zoom: 16,
+  },
+  /** Строка для поиска адреса в Google Maps. */
   mapQuery: "Казахстан, Алматинская область, Талгарский район, село Еркін, улица Маметова, 14",
   phone: {
-    display: "+7 (727) 305-46-22",
-    href: "tel:+77273054622",
+    display: "+7 (771) 456-00-59",
+    href: "tel:+77714560059",
   },
   instagram: {
     handle: "@kunshuak_erkin",
@@ -52,13 +75,6 @@ export const site = {
    * (например, ссылку на Google Drive) — кнопка станет активной.
    */
   documentsUrl: "",
-
-  /**
-   * Главная фотография для первого экрана. Пока null — показывается
-   * декоративная композиция с солнцем и облаками.
-   * Пример: { src: "/images/hero.jpg", width: 1600, height: 1200, alt: { kk: "...", ru: "..." } }
-   */
-  heroPhoto: null as Photo | null,
 
   /**
    * Описания групп. Пока список пуст, показывается общий блок «8 топ / 8 групп».
@@ -76,7 +92,18 @@ export const site = {
 
 export const mapLinks = {
   google: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.mapQuery)}`,
-  twoGis: `https://2gis.kz/search/${encodeURIComponent(site.mapQuery)}`,
+  twoGis: site.twoGis.url,
+  /**
+   * Адрес iframe официального виджета 2ГИС «Фирмы на карте» — так же его собирает
+   * загрузчик https://widgets.2gis.com/js/DGWidgetLoader.js. Ключ не требуется.
+   */
+  twoGisWidget: `https://widgets.2gis.com/widget?type=firmsonmap&options=${encodeURIComponent(
+    JSON.stringify({
+      pos: { lat: site.twoGis.lat, lon: site.twoGis.lon, zoom: site.twoGis.zoom },
+      opt: { city: site.twoGis.city },
+      org: site.twoGis.orgId,
+    }),
+  )}`,
 };
 
 export const sectionIds = [

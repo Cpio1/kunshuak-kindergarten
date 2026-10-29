@@ -100,22 +100,9 @@
   }
 }
 
-.sun-rays {
-  animation: sun-spin 80s linear infinite;
-}
-
-@keyframes sun-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-  .sun-rays {
-    animation: none;
   }
   *,
   *::before,

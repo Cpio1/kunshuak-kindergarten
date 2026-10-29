@@ -1,6 +1,6 @@
 "use client";
 
-import { mapLinks, site } from "@/lib/site-data";
+import { mapLinks, site, type ImageFile } from "@/lib/site-data";
 import { Cloud, SunMark } from "@/components/shared/decor";
 import { DocumentsAction, useDocumentsText } from "@/components/shared/documents-action";
 import { GalleryEmpty, GalleryRowFiller, GalleryThumb, Lightbox, justifiedItemStyle, useGallery } from "@/components/shared/gallery";
@@ -10,6 +10,7 @@ import {
   ChatIcon,
   ChevronDownIcon,
   ClockIcon,
+  ExternalIcon,
   FolderIcon,
   InstagramIcon,
   PhoneIcon,
@@ -17,6 +18,8 @@ import {
   UsersIcon,
 } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
+import { SectionPhoto } from "@/components/shared/section-photo";
+import { TwoGisMap } from "@/components/shared/two-gis-map";
 import { mobileId } from "./header";
 
 const container = "mx-auto max-w-3xl px-4";
@@ -24,7 +27,8 @@ const sectionTitle = "mt-2 text-[24px] font-extrabold leading-tight text-ink md:
 
 const cardIcons = { age: BalloonIcon, groups: UsersIcon, language: ChatIcon, hours: ClockIcon } as const;
 
-export function MobileAbout() {
+/** photo — public/images/main-page2.*; если файла нет, блок фото просто не выводится. */
+export function MobileAbout({ photo }: { photo: ImageFile | null }) {
   const { t } = useLanguage();
   const cards = Object.entries(t.about.cards) as [keyof typeof cardIcons, { label: string; value: string }][];
 
@@ -34,6 +38,16 @@ export function MobileAbout() {
         <p className="kicker">{t.about.kicker}</p>
         <h2 className={sectionTitle}>{t.about.title}</h2>
         <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{t.about.text}</p>
+        {photo && (
+          <div className="mt-4 flex justify-center">
+            <SectionPhoto
+              photo={photo}
+              alt={t.about.photoAlt}
+              sizes="(min-width: 768px) 420px, 92vw"
+              className="max-h-[240px] md:max-h-[300px]"
+            />
+          </div>
+        )}
         <ul className="mt-5 grid grid-cols-2 gap-2.5 md:grid-cols-4">
           {cards.map(([key, card], i) => {
             const Icon = cardIcons[key];
@@ -261,10 +275,10 @@ export function MobileContacts() {
             <PhoneIcon className="size-5" />
             {t.header.call}
           </a>
-          <p className="col-span-2 mt-1 text-sm font-semibold text-ink">{t.contacts.map}</p>
+          <TwoGisMap className="col-span-2 mt-1 h-[260px] md:h-[300px]" />
           {[
+            { href: mapLinks.twoGis, label: t.contacts.open2gis },
             { href: mapLinks.google, label: t.contacts.mapGoogle },
-            { href: mapLinks.twoGis, label: t.contacts.map2gis },
           ].map((link) => (
             <a
               key={link.href}
@@ -275,6 +289,7 @@ export function MobileContacts() {
             >
               <PinIcon className="size-4 shrink-0" />
               {link.label}
+              <ExternalIcon className="size-4 shrink-0 text-ink-soft" />
               <span className="sr-only"> {t.contacts.newTab}</span>
             </a>
           ))}

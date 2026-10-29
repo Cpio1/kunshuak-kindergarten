@@ -1,12 +1,11 @@
 "use client";
 
-import { site } from "@/lib/site-data";
-import { Cloud } from "@/components/shared/decor";
+import { site, type ImageFile } from "@/lib/site-data";
 import { HeroVisual } from "@/components/shared/hero-visual";
 import { ArrowDownIcon, PhoneIcon, PinIcon } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
 
-export function Hero() {
+export function Hero({ photo }: { photo: ImageFile | null }) {
   const { locale, t } = useLanguage();
 
   return (
@@ -57,10 +56,10 @@ export function Hero() {
         </div>
 
         <div className="relative flex items-center justify-center">
-          <Cloud className="absolute -top-2 left-2 w-24 opacity-90 drop-shadow-sm" />
           <HeroVisual
+            photo={photo}
             sizes="(min-width: 1200px) 520px, 45vw"
-            sceneClassName="w-full max-w-[500px]"
+            logoSize={250}
             imageClassName="max-h-[min(540px,calc(100svh-9rem))]"
           />
         </div>

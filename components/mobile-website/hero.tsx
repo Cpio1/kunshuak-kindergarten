@@ -1,12 +1,12 @@
 "use client";
 
-import { site } from "@/lib/site-data";
+import { site, type ImageFile } from "@/lib/site-data";
 import { HeroVisual } from "@/components/shared/hero-visual";
 import { ArrowDownIcon, PhoneIcon, PinIcon } from "@/components/shared/icons";
 import { useLanguage } from "@/components/shared/language-provider";
 import { mobileId } from "./header";
 
-export function MobileHero() {
+export function MobileHero({ photo }: { photo: ImageFile | null }) {
   const { locale, t } = useLanguage();
 
   return (
@@ -47,8 +47,9 @@ export function MobileHero() {
 
         <div className="mt-5 flex justify-center md:mt-0">
           <HeroVisual
+            photo={photo}
             sizes="(min-width: 768px) 340px, 92vw"
-            sceneClassName="h-auto w-full max-w-[300px] md:max-w-[340px]"
+            logoSize={160}
             imageClassName="max-h-[300px]"
           />
         </div>
