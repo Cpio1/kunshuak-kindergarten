@@ -73,11 +73,14 @@ export function MobileAbout({ photo }: { photo: ImageFile | null }) {
   );
 }
 
+const groupIcons = { count: UsersIcon, ages: BalloonIcon, language: ChatIcon } as const;
+
 export function MobileGroupsFood() {
   const { locale, t } = useLanguage();
+  const groupCards = Object.entries(t.groups.cards) as [keyof typeof groupIcons, { value: string; text: string }][];
 
   return (
-    <div className={`${container} grid gap-3 py-2 md:grid-cols-2`}>
+    <div className={`${container} grid gap-3 py-2`}>
       <section
         id={mobileId("groups")}
         aria-labelledby="m-groups-title"
@@ -85,18 +88,29 @@ export function MobileGroupsFood() {
       >
         <Cloud className="absolute -right-3 top-3 w-16 opacity-80" />
         <p className="kicker">{t.groups.kicker}</p>
-        <div className="relative mt-3 flex items-center gap-4">
-          <span className="inline-flex size-[72px] shrink-0 items-center justify-center rounded-full bg-sun font-display text-[40px] font-black text-ink shadow-[0_0_0_6px_rgb(255_255_255/0.55)]">
-            {site.groupsCount}
-          </span>
-          <div className="min-w-0">
-            <h2 id="m-groups-title" className="text-2xl font-extrabold leading-tight text-ink">
-              {t.groups.count}
-            </h2>
-            <p className="mt-0.5 text-[15px] font-semibold text-ink">{t.groups.ages}</p>
-          </div>
-        </div>
-        <p className="relative mt-3 text-sm leading-relaxed text-ink-soft">{t.groups.note}</p>
+        <h2 id="m-groups-title" className="relative mt-2 text-[22px] font-extrabold leading-tight text-ink md:text-2xl">
+          {t.groups.title}
+        </h2>
+        <p className="relative mt-2 text-sm leading-relaxed text-ink-soft md:text-[15px]">{t.groups.text}</p>
+
+        <ul className="relative mt-4 grid gap-2 md:grid-cols-3 md:gap-3">
+          {groupCards.map(([key, card]) => {
+            const Icon = groupIcons[key];
+            return (
+              <li key={key} className="flex items-center gap-3 rounded-2xl bg-white/90 px-3.5 py-3 md:block md:p-4">
+                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-sun text-ink">
+                  <Icon className="size-5" />
+                </span>
+                <span className="min-w-0 md:mt-2.5 md:block">
+                  <span className="block font-display text-base font-extrabold leading-tight text-ink md:text-lg">
+                    {card.value}
+                  </span>
+                  <span className="mt-0.5 block text-[13px] leading-snug text-ink-soft">{card.text}</span>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
 
         {site.groups.length > 0 && (
           <div className="relative mt-4">
@@ -117,22 +131,23 @@ export function MobileGroupsFood() {
 
       <section id={mobileId("food")} aria-labelledby="m-food-title" className="card scroll-mt-20 p-5">
         <p className="kicker">{t.food.kicker}</p>
-        <div className="mt-3 flex items-center gap-4">
-          <span className="inline-flex size-[72px] shrink-0 items-center justify-center rounded-full bg-leaf-soft text-leaf-deep">
-            <BowlIcon className="size-9" />
+        <div className="mt-2 flex items-center gap-3">
+          <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-leaf-soft text-leaf-deep">
+            <BowlIcon className="size-6" />
           </span>
-          <div className="min-w-0">
-            <h2 id="m-food-title" className="text-xl font-extrabold leading-tight text-ink">
-              {t.food.title}
-            </h2>
-            <p className="mt-1 text-sm leading-relaxed text-ink-soft">{t.food.text}</p>
-          </div>
+          <h2 id="m-food-title" className="text-[22px] font-extrabold leading-tight text-ink md:text-2xl">
+            {t.food.title}
+          </h2>
         </div>
-        <div className="mt-3 flex gap-1.5" aria-hidden="true">
-          {[0, 1, 2, 3].map((i) => (
-            <SunMark key={i} className="size-6" />
-          ))}
-        </div>
+        <p className="mt-3 text-sm leading-relaxed text-ink-soft md:text-[15px]">{t.food.text}</p>
+        <p className="mt-4 flex items-center gap-3 rounded-2xl bg-leaf-soft/70 px-3.5 py-3">
+          <span className="flex shrink-0 gap-0.5" aria-hidden="true">
+            {[0, 1, 2, 3].map((i) => (
+              <SunMark key={i} className="size-[18px]" />
+            ))}
+          </span>
+          <span className="font-display text-[15px] font-extrabold leading-tight text-leaf-deep">{t.food.accent}</span>
+        </p>
       </section>
     </div>
   );
