@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ясли-сад «Күншуақ» — лендинг
 
-## Getting Started
-
-First, run the development server:
+Next.js (App Router) + TypeScript + Tailwind CSS. Подходит для размещения на Vercel без дополнительной настройки.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production-сборка
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Где что лежит
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Путь | Назначение |
+| --- | --- |
+| `lib/site-data.ts` | Все факты о саде: адрес, телефон, Instagram, режим работы, **documentsUrl**, главное фото, группы, галерея |
+| `lib/translations.ts` | Все тексты интерфейса на казахском (`kk`) и русском (`ru`) |
+| `components/website/` | Версия для компьютера (от 1024 px) |
+| `components/mobile-website/` | Версия для телефона и планшета (до 1024 px) |
+| `components/shared/` | Общие части: переключатель языка, галерея и просмотрщик, иконки, декор |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Обе версии выводятся по одному адресу, видимую выбирает CSS (брейкпоинт `lg`).
 
-## Learn More
+## Как добавить реальные фотографии
 
-To learn more about Next.js, take a look at the following resources:
+1. Положите файлы в `public/gallery/` (например, `01.jpg`).
+2. Добавьте запись в `site.gallery` в `lib/site-data.ts`, указав реальные размеры файла:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```ts
+gallery: [
+  { src: "/gallery/01.jpg", width: 1200, height: 900, alt: { kk: "Топтағы сабақ", ru: "Занятие в группе" } },
+],
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Сначала видно до 6 фото на компьютере и до 4 на телефоне, остальные открываются по кнопке «Көбірек көрсету / Показать больше». Миниатюры не обрезаются.
 
-## Deploy on Vercel
+**Главное фото** первого экрана: положите файл в `public/images/` и заполните `site.heroPhoto` (тот же формат). Пока там `null`, показывается рисунок с солнцем.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Как добавить ссылку на документы
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+В `lib/site-data.ts` впишите адрес в `documentsUrl`:
+
+```ts
+documentsUrl: "https://drive.google.com/…",
+```
+
+Пока строка пустая, кнопка неактивна и подписана «Жақында / Скоро». Когда ссылка есть, кнопка называется «Құжаттарды қарау / Посмотреть документы» и открывает документы в новой вкладке.
+
+## Как добавить описания групп
+
+Заполните `site.groups` — блок «Топтар / Группы» сам выведет список:
+
+```ts
+groups: [{ name: { kk: "Балапан", ru: "Балапан" }, description: { kk: "…", ru: "…" } }],
+```
