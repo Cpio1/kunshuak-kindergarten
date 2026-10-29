@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { site, sectionIds } from "@/lib/site-data";
-import { SunMark } from "@/components/shared/decor";
+import { Logo } from "@/components/shared/logo";
 import { CloseIcon, MenuIcon, PhoneIcon } from "@/components/shared/icons";
 import { LangSwitch } from "@/components/shared/lang-switch";
 import { useLanguage } from "@/components/shared/language-provider";
@@ -45,9 +45,9 @@ export function MobileHeader() {
       </a>
       <div className="border-b border-line/80 bg-milk/95 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-3xl items-center gap-2 px-4">
-          <a href={`#${mobileId("home")}`} className="mr-auto flex items-center gap-1.5 rounded-xl" aria-label={t.header.toTop}>
-            <SunMark className="size-8" />
-            <span className="font-display text-[19px] font-extrabold text-ink">{site.shortName}</span>
+          <a href={`#${mobileId("home")}`} className="mr-auto flex items-center gap-2 rounded-xl">
+            <Logo size={44} preload />
+            <span aria-hidden="true" className="font-display text-[19px] font-extrabold text-ink">{site.shortName}</span>
           </a>
           <a
             href={site.phone.href}

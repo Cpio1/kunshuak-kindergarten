@@ -1,7 +1,7 @@
 "use client";
 
 import { site, sectionIds } from "@/lib/site-data";
-import { SunMark } from "@/components/shared/decor";
+import { Logo } from "@/components/shared/logo";
 import { PhoneIcon } from "@/components/shared/icons";
 import { LangSwitch } from "@/components/shared/lang-switch";
 import { useLanguage } from "@/components/shared/language-provider";
@@ -18,9 +18,9 @@ export function Header() {
         {t.header.skip}
       </a>
       <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-4 px-6 xl:gap-6 xl:px-8">
-        <a href="#home" className="flex shrink-0 items-center gap-2 rounded-xl" aria-label={t.header.toTop}>
-          <SunMark className="size-9" />
-          <span className="leading-none">
+        <a href="#home" className="flex shrink-0 items-center gap-2.5 rounded-xl">
+          <Logo size={52} preload />
+          <span className="leading-none" aria-hidden="true">
             <span className="block font-display text-[21px] font-extrabold text-ink">{site.shortName}</span>
             <span className="mt-0.5 hidden text-xs font-medium text-ink-soft xl:block">
               {t.hero.place}

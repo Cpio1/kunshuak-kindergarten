@@ -2,7 +2,7 @@
 
 import { site } from "@/lib/site-data";
 import { CurrentYear } from "@/components/shared/current-year";
-import { SunMark } from "@/components/shared/decor";
+import { Logo } from "@/components/shared/logo";
 import { useLanguage } from "@/components/shared/language-provider";
 import { mobileId } from "./header";
 
@@ -13,7 +13,7 @@ export function MobileFooter() {
     <footer className="mt-4 border-t border-line bg-cream/60">
       <div className="mx-auto max-w-3xl px-4 py-5 text-sm text-ink-soft">
         <p className="flex items-center gap-2">
-          <SunMark className="size-6 shrink-0" />
+          <Logo size={40} />
           <span>
             © <CurrentYear /> {site.name[locale]}
           </span>
